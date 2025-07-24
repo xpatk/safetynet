@@ -1,4 +1,4 @@
-package model;
+package com.safetynet.safetynet.model;
 
 public class Person {
 

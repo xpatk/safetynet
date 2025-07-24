@@ -1,4 +1,4 @@
-package model;
+package com.safetynet.safetynet.model;
 
 import java.util.List;
 
