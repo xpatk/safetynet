@@ -5,11 +5,7 @@ import com.safetynet.safetynet.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-class View {
-    public void something() {
-    };
 
-}
 @RestController
 @RequestMapping("/person")
 public class PersonController {
