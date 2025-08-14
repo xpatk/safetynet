@@ -22,7 +22,7 @@ public class PersonController {
     // PUT
     @PutMapping
     public void updatePerson(@RequestBody Person person) {
-        personService.updatePerson(person);
+        personService.updatePerson(person.getFirstName(), person.getLastName(), person);
     }
 
     // DELETE
