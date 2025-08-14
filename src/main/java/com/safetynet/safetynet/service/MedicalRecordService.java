@@ -2,18 +2,16 @@ package com.safetynet.safetynet.service;
 
 import com.safetynet.safetynet.model.MedicalRecord;
 import com.safetynet.safetynet.repository.MedicalRecordRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MedicalRecordService {
 
     private final MedicalRecordRepository repository;
-
-    public MedicalRecordService(MedicalRecordRepository repository) {
-        this.repository = repository;
-    }
 
     public MedicalRecord add(MedicalRecord record) {
         return repository.addMedicalRecord(record);
