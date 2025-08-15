@@ -2,6 +2,7 @@ package com.safetynet.safetynet.service;
 
 import com.safetynet.safetynet.model.Firestation;
 import com.safetynet.safetynet.repository.FirestationRepository;
+import com.safetynet.safetynet.repository.FirestationRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
