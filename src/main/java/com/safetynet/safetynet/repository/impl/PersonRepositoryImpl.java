@@ -1,6 +1,7 @@
-package com.safetynet.safetynet.repository;
+package com.safetynet.safetynet.repository.impl;
 
 import com.safetynet.safetynet.model.Person;
+import com.safetynet.safetynet.repository.PersonRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
