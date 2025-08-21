@@ -12,7 +12,7 @@ public class FirestationController {
     private final FirestationCoverageService coverageService;
 
     @GetMapping("/firestation")
-    public FirestationCoverageDTO getCoverage(@RequestParam int stationNumber) {
+    public FirestationCoverageDTO getCoverage(@RequestParam String stationNumber) {
         return coverageService.getCoverageByStation(stationNumber);
     }
 }

@@ -21,10 +21,10 @@ public class FirestationCoverageService {
     private final PersonService personService;
     private final MedicalRecordService medicalRecordService;
 
-    public FirestationCoverageDTO getCoverageByStation(int stationNumber) {
+    public FirestationCoverageDTO getCoverageByStation(String stationNumber) {
         // Get addresses for the given station
         List<String> addresses = firestationService.getAllFirestations().stream()
-                .filter(f -> f.getStation() == stationNumber)
+                .filter(f -> f.getStation().equals(stationNumber))
                 .map(Firestation::getAddress)
                 .toList();
 
