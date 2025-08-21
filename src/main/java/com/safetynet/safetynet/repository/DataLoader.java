@@ -39,7 +39,7 @@ public class DataLoader {
             firestations = dataDTO.getFirestations();
             medicalrecords = dataDTO.getMedicalrecords();
 
-            log.info("✅ Data loaded successfully. {} persons, {} firestations, {} medical records",
+            log.info("Data loaded successfully. {} persons, {} firestations, {} medical records",
                     persons.size(), firestations.size(), medicalrecords.size());
         } catch (IOException e) {
             log.error("Failed to load data: {}", e.getMessage());
