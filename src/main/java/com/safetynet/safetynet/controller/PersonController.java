@@ -5,6 +5,8 @@ import com.safetynet.safetynet.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/person")
@@ -12,6 +14,12 @@ public class PersonController {
 
     @Autowired
     private PersonService personService;
+
+    // GET
+    @GetMapping
+    public List<Person> getAllPersons() {
+        return personService.getAllPersons();
+    }
 
     // POST
     @PostMapping
