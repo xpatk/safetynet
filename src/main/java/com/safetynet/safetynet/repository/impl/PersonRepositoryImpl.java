@@ -23,13 +23,16 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @Override
     public Person addPerson(Person person) {
-        getPersons().add(person);
+        List<Person> persons = getPersons();
+        persons.add(person);
+        dataLoader.setPersons(persons);
         return person;
     }
 
     @Override
     public Person updatePerson(String firstName, String lastName, Person updatedPerson) {
-        for (Person p : getPersons()) {
+        List<Person> persons = getPersons();
+        for (Person p : persons) {
             if (p.getFirstName().equalsIgnoreCase(firstName) &&
                     p.getLastName().equalsIgnoreCase(lastName)) {
                 p.setAddress(updatedPerson.getAddress());
@@ -37,6 +40,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                 p.setZip(updatedPerson.getZip());
                 p.setPhone(updatedPerson.getPhone());
                 p.setEmail(updatedPerson.getEmail());
+                dataLoader.setPersons(persons); // persist change
                 return p;
             }
         }
@@ -45,16 +49,15 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @Override
     public boolean deletePerson(String firstName, String lastName) {
-        Iterator<Person> iterator = getPersons().iterator();
-        while (iterator.hasNext()) {
-            Person p = iterator.next();
-            if (p.getFirstName().equalsIgnoreCase(firstName) &&
-                    p.getLastName().equalsIgnoreCase(lastName)) {
-                iterator.remove();
-                return true;
-            }
+        List<Person> persons = getPersons();
+        boolean removed = persons.removeIf(p ->
+                p.getFirstName().equalsIgnoreCase(firstName) &&
+                        p.getLastName().equalsIgnoreCase(lastName)
+        );
+        if (removed) {
+            dataLoader.setPersons(persons); // persist change
         }
-        return false;
+        return removed;
     }
 
     @Override

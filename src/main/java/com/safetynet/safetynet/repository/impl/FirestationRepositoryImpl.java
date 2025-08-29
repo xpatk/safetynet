@@ -1,6 +1,7 @@
 package com.safetynet.safetynet.repository.impl;
 
 import com.safetynet.safetynet.model.Firestation;
+import com.safetynet.safetynet.repository.DataLoader;
 import com.safetynet.safetynet.repository.FirestationRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,25 +12,32 @@ import java.util.List;
 @Repository
 public class FirestationRepositoryImpl implements FirestationRepository {
 
-    private final List<Firestation> firestations = new ArrayList<>();
+    private final DataLoader dataLoader;
+
+    public FirestationRepositoryImpl(DataLoader dataLoader) {
+        this.dataLoader = dataLoader;
+    }
 
     @Override
     public List<Firestation> getAllFirestations() {
-        return firestations;
+        return dataLoader.getFirestations();
     }
 
     @Override
     public Firestation addFirestation(Firestation firestation) {
+        List<Firestation> firestations = dataLoader.getFirestations();
         firestations.add(firestation);
+        dataLoader.setFirestations(firestations); // persist to file
         return firestation;
     }
 
     @Override
     public Firestation updateFirestation(String address, Firestation updatedFirestation) {
-        for (int i = 0; i < firestations.size(); i++) {
-            Firestation current = firestations.get(i);
+        List<Firestation> firestations = dataLoader.getFirestations();
+        for (Firestation current : firestations) {
             if (current.getAddress().equals(address)) {
                 current.setStation(updatedFirestation.getStation());
+                dataLoader.setFirestations(firestations); // persist to file
                 return current;
             }
         }
@@ -38,15 +46,11 @@ public class FirestationRepositoryImpl implements FirestationRepository {
 
     @Override
     public boolean deleteFirestation(String address) {
-        Iterator<Firestation> iterator = firestations.iterator();
-        while (iterator.hasNext()) {
-            Firestation firestation = iterator.next();
-            if (firestation.getAddress().equals(address)) {
-                iterator.remove();
-                return true;
-            }
+        List<Firestation> firestations = dataLoader.getFirestations();
+        boolean removed = firestations.removeIf(f -> f.getAddress().equals(address));
+        if (removed) {
+            dataLoader.setFirestations(firestations); // persist to file
         }
-        return false;
+        return removed;
     }
 }
-
