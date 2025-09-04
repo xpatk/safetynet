@@ -1,7 +1,6 @@
 package com.safetynet.safetynet.service;
 
 import com.safetynet.safetynet.dto.FirestationCoverageDTO;
-import com.safetynet.safetynet.dto.PersonInfoDTO;
 import com.safetynet.safetynet.model.Firestation;
 import com.safetynet.safetynet.model.Person;
 import com.safetynet.safetynet.model.MedicalRecord;
@@ -34,8 +33,13 @@ public class FirestationCoverageService {
                 .toList();
 
         // Map persons to DTO
-        List<PersonInfoDTO> personInfoList = persons.stream()
-                .map(p -> new PersonInfoDTO(p.getFirstName(), p.getLastName(), p.getAddress(), p.getPhone()))
+        List<FirestationCoverageDTO.PersonInfoDTO> personInfoList = persons.stream()
+                .map(p -> new FirestationCoverageDTO.PersonInfoDTO(
+                        p.getFirstName(),
+                        p.getLastName(),
+                        p.getAddress(),
+                        p.getPhone()
+                ))
                 .collect(Collectors.toList());
 
         // Count children
@@ -46,6 +50,7 @@ public class FirestationCoverageService {
                 })
                 .count();
 
+        // Count adults
         long adultCount = persons.size() - childCount;
 
         return new FirestationCoverageDTO(personInfoList, adultCount, childCount);
