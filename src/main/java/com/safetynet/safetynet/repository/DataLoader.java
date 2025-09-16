@@ -3,7 +3,7 @@ package com.safetynet.safetynet.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.safetynet.dto.DataDTO;
 import com.safetynet.safetynet.model.Person;
-import com.safetynet.safetynet.model.Firestation;
+import com.safetynet.safetynet.model.FireStation;
 import com.safetynet.safetynet.model.MedicalRecord;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class DataLoader {
 
     private static final String JSON_FILE_PATH = "src/main/resources/data.json";
     private List<Person> persons;
-    private List<Firestation> firestations;
+    private List<FireStation> firestations;
     private List<MedicalRecord> medicalrecords;
 
     public DataLoader() {
@@ -34,7 +34,7 @@ public class DataLoader {
             File jsonFile = new File(JSON_FILE_PATH);
             DataDTO dataDTO = objectMapper.readValue(jsonFile, DataDTO.class);
             persons = dataDTO.getPersons();
-            firestations = dataDTO.getFirestations();
+            firestations = dataDTO.getFireStations();
             medicalrecords = dataDTO.getMedicalrecords();
         } catch (IOException e) {
             log.error("Failed to load data: {}", e.getMessage());
@@ -61,12 +61,12 @@ public class DataLoader {
         writeDataToFile();
     }
 
-    public void setFirestations(List<Firestation> firestations) {
+    public void setFireStations(List<FireStation> firestations) {
         this.firestations = firestations;
         writeDataToFile();
     }
 
-    public void setMedicalrecords(List<MedicalRecord> medicalrecords) {
+    public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
         this.medicalrecords = medicalrecords;
         writeDataToFile();
     }

@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FirestationCoverageDTO {
+public class FireStationCoverageDTO {
     private List<PersonInfoDTO> persons;
     private long adultCount;
     private long childCount;
