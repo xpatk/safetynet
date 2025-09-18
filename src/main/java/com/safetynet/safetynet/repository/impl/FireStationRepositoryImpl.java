@@ -1,25 +1,22 @@
 package com.safetynet.safetynet.repository.impl;
 
-import com.safetynet.safetynet.model.Firestation;
+import com.safetynet.safetynet.model.FireStation;
 import com.safetynet.safetynet.repository.DataLoader;
-import com.safetynet.safetynet.repository.FirestationRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
-public class FirestationRepositoryImpl implements FirestationRepository {
+public class FireStationRepositoryImpl implements FirestationRepository {
 
     private final DataLoader dataLoader;
 
-    public FirestationRepositoryImpl(DataLoader dataLoader) {
+    public FireStationRepositoryImpl(DataLoader dataLoader) {
         this.dataLoader = dataLoader;
     }
 
     @Override
-    public List<Firestation> getAllFirestations() {
+    public List<FireStation> getAllFirestations() {
         return dataLoader.getFirestations();
     }
 

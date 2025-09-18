@@ -9,27 +9,33 @@ import java.util.List;
 /**
  * Data Transfer Object (DTO) representing the detailed information
  * of a person, including personal, contact, and medical details.
- *
+ * <p>
  * This DTO is used in endpoints that return individual or grouped
  * information about persons in the SafetyNet system.
  */
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class PersonInfoDTO {
+
     /** Person's first name. */
     private String firstName;
+
     /** Person's last name. */
     private String lastName;
+
     /** Person's address. */
     private String address;
+
     /** Person's age. */
     private int age;
+
     /** Person's email address. */
     private String email;
+
     /** List of medications the person takes. */
     private List<String> medications;
+
     /** List of allergies the person has. */
     private List<String> allergies;
 }

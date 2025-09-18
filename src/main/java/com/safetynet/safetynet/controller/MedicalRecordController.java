@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Handles all operations related to medical records.
+ * Provides endpoints to view, add, update, and delete medical records
+ * in the SafetyNet system.
+ */
 @RestController
 @RequestMapping("/medicalrecord")
 @AllArgsConstructor

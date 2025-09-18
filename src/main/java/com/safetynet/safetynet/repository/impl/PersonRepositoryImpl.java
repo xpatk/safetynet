@@ -5,7 +5,6 @@ import com.safetynet.safetynet.repository.DataLoader;
 import com.safetynet.safetynet.repository.PersonRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
