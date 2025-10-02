@@ -1,7 +1,9 @@
 package com.safetynet.safetynet.service;
 
-import com.safetynet.safetynet.model.Firestation;
-import com.safetynet.safetynet.repository.FirestationRepository;
+import com.safetynet.safetynet.model.FireStation;
+import com.safetynet.safetynet.model.FireStation;
+import com.safetynet.safetynet.repository.FireStationRepository;
+import com.safetynet.safetynet.repository.FireStationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,21 +14,21 @@ import java.util.List;
 
 public class FirestationService {
 
-    private final FirestationRepository firestationRepository;
+    private final FireStationRepository firestationRepository;
 
-    public Firestation addFirestation(Firestation firestation) {
-        return firestationRepository.addFirestation(firestation);
+    public FireStation addFireStation(FireStation firestation) {
+        return firestationRepository.addFireStation(firestation);
     }
 
-    public Firestation updateFirestation(String address, Firestation updatedFirestation) {
+    public FireStation updateFirestation(String address, FireStation updatedFirestation) {
         return firestationRepository.updateFirestation(address, updatedFirestation);
     }
 
-    public boolean deleteFirestation(String address) {
-        return firestationRepository.deleteFirestation(address);
+    public boolean deleteFireStation(String address) {
+        return firestationRepository.deleteFireStation(address);
     }
 
-    public List<Firestation> getAllFirestations() {
-        return firestationRepository.getAllFirestations();
+    public List<FireStation> getAllFireStations() {
+        return firestationRepository.getAllFireStations();
     }
 }

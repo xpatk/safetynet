@@ -7,5 +7,10 @@ public interface FireStationRepository {
     List<FireStation> getAllFireStations();
     FireStation addFireStation(FireStation firestation);
     FireStation updateFireStation(String address, FireStation updatedFirestation);
+
+    FireStation addFirestation(FireStation firestation);
+
+    FireStation updateFirestation(String address, FireStation updatedFirestation);
+
     boolean deleteFireStation(String address);
 }

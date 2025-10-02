@@ -39,7 +39,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                 p.setZip(updatedPerson.getZip());
                 p.setPhone(updatedPerson.getPhone());
                 p.setEmail(updatedPerson.getEmail());
-                dataLoader.setPersons(persons); // persist change
+                dataLoader.setPersons(persons);
                 return p;
             }
         }
