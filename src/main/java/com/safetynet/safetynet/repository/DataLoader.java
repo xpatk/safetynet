@@ -1,6 +1,8 @@
 package com.safetynet.safetynet.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.safetynet.safetynet.dto.DataDTO;
 import com.safetynet.safetynet.model.Person;
 import com.safetynet.safetynet.model.FireStation;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -30,6 +31,9 @@ public class DataLoader {
 
     private void loadData() {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         try {
             File jsonFile = new File(JSON_FILE_PATH);
             DataDTO dataDTO = objectMapper.readValue(jsonFile, DataDTO.class);
@@ -48,6 +52,9 @@ public class DataLoader {
         dataDTO.setMedicalrecords(medicalrecords);
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(JSON_FILE_PATH), dataDTO);
         } catch (IOException e) {

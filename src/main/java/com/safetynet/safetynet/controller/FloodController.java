@@ -1,7 +1,7 @@
 package com.safetynet.safetynet.controller;
 
-import com.safetynet.safetynet.dto.FloodDTO;
-import com.safetynet.safetynet.service.FloodService;
+import com.safetynet.safetynet.dto.FloodStationsDTO;
+import com.safetynet.safetynet.service.FloodAlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,25 +18,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FloodController {
 
-    private final FloodService floodService;
+    private final FloodAlertService floodService;
 
     /**
-     * GET endpoint to retrieve households and residents served by a list of fire stations.
+     * GET endpoint to retrieve households served by a list of fire stations.
      *
-     * @param stations list of fire station numbers
-     * @return a {@link FloodDTO} containing households grouped by address
+     * @param stations List of fire station numbers
+     * @return a {@link FloodStationsDTO} containing households grouped by address
      */
     @GetMapping("/stations")
     @Operation(summary = "Get households by fire stations",
-            description = "Returns a list of households (grouped by address) with resident details " +
+            description = "Returns households grouped by address with resident details " +
                     "for all addresses covered by the given fire station numbers.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Flood data retrieved successfully."),
             @ApiResponse(responseCode = "404", description = "No data found for the given station numbers.")
     })
-    public ResponseEntity<FloodDTO> getHouseholdsByStations(@RequestParam List<String> stations) {
+    public ResponseEntity<FloodStationsDTO> getHouseholdsByStations(@RequestParam List<String> stations) {
         log.info("Fetching flood data for stations: {}", stations);
-        FloodDTO floodDTO = floodService.getHouseholdsByStations(stations);
+
+        FloodStationsDTO floodDTO = floodService.getHouseholdsByStations(stations);
 
         if (floodDTO == null || floodDTO.getHouseholds().isEmpty()) {
             log.warn("No flood data found for stations: {}", stations);

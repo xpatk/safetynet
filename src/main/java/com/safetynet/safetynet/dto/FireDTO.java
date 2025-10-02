@@ -25,7 +25,7 @@ import java.util.List;
 public class FireDTO {
 
     /** The number of the fire station. */
-    private int stationNumber;
+    private int fireStationNumber;
     /** List of residents under the coverage of this fire station. */
     private List<ResidentInfo> residents;
 

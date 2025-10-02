@@ -12,8 +12,8 @@ public class PersonService {
 
     private final PersonRepository personRepository;
 
-    public Person addPerson(Person person) {
-        return personRepository.addPerson(person);
+    public void addPerson(Person person) {
+        personRepository.addPerson(person);
     }
 
     public Person updatePerson(String firstName, String lastName, Person updatedPerson) {

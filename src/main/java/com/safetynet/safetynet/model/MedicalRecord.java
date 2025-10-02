@@ -1,10 +1,13 @@
 package com.safetynet.safetynet.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -33,9 +36,10 @@ public class MedicalRecord {
     /** Last name of the individual. Cannot be empty. */
     @NotBlank(message = "Last name cannot be empty.")
     private String lastName;
-    /** Birthdate of the individual, in the format "MM/dd/yyyy". Cannot be empty. */
-    @NotBlank(message = "Birthdate cannot be empty.")
-    private String birthdate;
+    /** Birthdate of the individual. Cannot be empty. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
+    @NotNull(message = "Birthdate cannot be empty.")
+    private LocalDate birthdate;
     /** List of medications prescribed to the individual. Includes name and dosage if applicable. */
     private List<String> medications;
     /** List of known allergies of the individual. */

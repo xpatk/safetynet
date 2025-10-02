@@ -5,6 +5,7 @@ import com.safetynet.safetynet.model.FireStation;
 import com.safetynet.safetynet.model.MedicalRecord;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -17,17 +18,18 @@ import java.util.List;
  */
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class DataDTO {
     /**
      * List of all persons managed by the system.
      */
-    private final List<Person> persons;
+    private List<Person> persons;
     /**
      * List of fire stations and their associated addresses.
      */
-    private final List<FireStation> firestations;
+    private List<FireStation> firestations;
     /**
      * List of medical records containing personal health information.
      */
-    private final List<MedicalRecord> medicalrecords;
+    private List<MedicalRecord> medicalrecords;
 }
