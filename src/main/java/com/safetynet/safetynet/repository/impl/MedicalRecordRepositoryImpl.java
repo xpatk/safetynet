@@ -24,7 +24,7 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
     public void addMedicalRecord(MedicalRecord record) {
         List<MedicalRecord> records = getMedicalRecords();
         records.add(record);
-        dataLoader.setMedicalrecords(records); // persist change
+        dataLoader.setMedicalRecords(records); // persist change
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
                 record.setBirthdate(updatedRecord.getBirthdate());
                 record.setMedications(updatedRecord.getMedications());
                 record.setAllergies(updatedRecord.getAllergies());
-                dataLoader.setMedicalrecords(records); // persist change
+                dataLoader.setMedicalRecords(records); // persist change
                 return record;
             }
         }
@@ -49,7 +49,7 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
                 record.getFirstName().equalsIgnoreCase(firstName) && record.getLastName().equalsIgnoreCase(lastName)
         );
         if (removed) {
-            dataLoader.setMedicalrecords(records);
+            dataLoader.setMedicalRecords(records);
         }
         return removed;
     }

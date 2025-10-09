@@ -1,7 +1,7 @@
 package com.safetynet.safetynet.controller;
 
 import com.safetynet.safetynet.dto.FireDTO;
-import com.safetynet.safetynet.service.FireService;
+import com.safetynet.safetynet.service.FireAlertService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/fire")
 @RequiredArgsConstructor
-public class FireController {
+public class FireAlertController {
 
-    private final FireService fireService;
+    private final FireAlertService fireAlertService;
 
     /**
      * GET endpoint to retrieve fire station number and residents' info for a given address.
@@ -33,7 +33,7 @@ public class FireController {
     })
     public ResponseEntity<FireDTO> getFireInfo(@RequestParam String address) {
         log.info("Fetching fire info for address: {}", address);
-        FireDTO fireDTO = fireService.getFireInfoByAddress(address);
+        FireDTO fireDTO = fireAlertService.getFireAlertByAddress(address);
 
         if (fireDTO == null || fireDTO.getResidents().isEmpty()) {
             log.warn("No fire data found for address: {}", address);

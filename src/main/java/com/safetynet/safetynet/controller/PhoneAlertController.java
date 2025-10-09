@@ -39,6 +39,6 @@ public class PhoneAlertController {
     })
     public PhoneAlertDTO getPhoneAlert(@RequestParam String fireStation) {
         log.info("Fetching phone alert for fireStation={}", fireStation);
-        return phoneAlertService.getPhoneNumbersByStation(fireStation);
+        return phoneAlertService.getPhonesByFireStation(fireStation);
     }
 }

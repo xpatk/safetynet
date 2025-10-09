@@ -15,20 +15,45 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Repository responsible for loading and persisting SafetyNet data
+ * from/to the JSON file located in {@code src/main/resources/data.json}.
+ * <p>
+ * The {@link DataLoader} reads the JSON file at application startup
+ * and stores the content (persons, fire stations, medical records)
+ * in memory. Whenever updates occur through setters, the file is
+ * rewritten to keep data persistence synchronized.
+ */
 @Slf4j
 @Repository
 @Getter
 public class DataLoader {
 
+    /** Default JSON file path containing application data. */
     private static final String JSON_FILE_PATH = "src/main/resources/data.json";
+
+    /** List of all persons managed by the system. */
     private List<Person> persons;
+
+    /** List of all fire stations and their assigned addresses. */
     private List<FireStation> firestations;
+
+    /** List of all medical records for the persons. */
     private List<MedicalRecord> medicalrecords;
 
+    /**
+     * Initializes the DataLoader by reading the JSON file
+     * and deserializing its contents into in-memory lists.
+     */
     public DataLoader() {
         loadData();
     }
 
+    /**
+     * Reads and deserializes data from the JSON file into
+     * {@link DataDTO}, initializing persons, fire stations,
+     * and medical records.
+     */
     private void loadData() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -39,42 +64,60 @@ public class DataLoader {
             DataDTO dataDTO = objectMapper.readValue(jsonFile, DataDTO.class);
             persons = dataDTO.getPersons();
             firestations = dataDTO.getFireStations();
-            medicalrecords = dataDTO.getMedicalrecords();
+            medicalrecords = dataDTO.getMedicalRecords();
+            log.info("Data successfully loaded from {}", JSON_FILE_PATH);
         } catch (IOException e) {
-            log.error("Failed to load data: {}", e.getMessage());
+            log.error("Failed to load data from {}: {}", JSON_FILE_PATH, e.getMessage());
         }
     }
 
+    /**
+     * Serializes and writes the current in-memory data to the JSON file.
+     */
     private void writeDataToFile() {
-        DataDTO dataDTO = new DataDTO();
-        dataDTO.setPersons(persons);
-        dataDTO.setFirestations(firestations);
-        dataDTO.setMedicalrecords(medicalrecords);
+        DataDTO dataDTO = new DataDTO(persons, firestations, medicalrecords);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         try {
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(JSON_FILE_PATH), dataDTO);
+            objectMapper.writerWithDefaultPrettyPrinter()
+                    .writeValue(new File(JSON_FILE_PATH), dataDTO);
+            log.info("Data successfully written to {}", JSON_FILE_PATH);
         } catch (IOException e) {
-            log.error("Failed to write data: {}", e.getMessage());
+            log.error("Failed to write data to file: {}", e.getMessage());
             throw new RuntimeException("Error writing data to file", e);
         }
     }
 
+    /**
+     * Updates the list of persons and persists the changes to file.
+     *
+     * @param persons the updated list of persons
+     */
     public void setPersons(List<Person> persons) {
         this.persons = persons;
         writeDataToFile();
     }
 
+    /**
+     * Updates the list of fire stations and persists the changes to file.
+     *
+     * @param firestations the updated list of fire stations
+     */
     public void setFireStations(List<FireStation> firestations) {
         this.firestations = firestations;
         writeDataToFile();
     }
 
+    /**
+     * Updates the list of medical records and persists the changes to file.
+     *
+     * @param medicalRecords the updated list of medical records
+     */
     public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
-        this.medicalrecords = medicalrecords;
+        this.medicalrecords = medicalRecords;
         writeDataToFile();
     }
 }

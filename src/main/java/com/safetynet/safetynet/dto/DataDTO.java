@@ -27,9 +27,9 @@ public class DataDTO {
     /**
      * List of fire stations and their associated addresses.
      */
-    private List<FireStation> firestations;
+    private List<FireStation> fireStations;
     /**
      * List of medical records containing personal health information.
      */
-    private List<MedicalRecord> medicalrecords;
+    private List<MedicalRecord> medicalRecords;
 }

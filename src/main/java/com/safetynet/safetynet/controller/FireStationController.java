@@ -1,7 +1,7 @@
 package com.safetynet.safetynet.controller;
 
 import com.safetynet.safetynet.dto.FireStationCoverageDTO;
-import com.safetynet.safetynet.service.FirestationCoverageService;
+import com.safetynet.safetynet.service.FireStationCoverageService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class FirestationController {
+public class FireStationController {
 
-    private final FirestationCoverageService coverageService;
+    private final FireStationCoverageService coverageService;
 
     /**
      * Fetches coverage information for a given fire station number.
