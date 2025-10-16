@@ -22,29 +22,18 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     }
 
     @Override
-    public FireStation addFireStation(FireStation firestation) {
-        return null;
-    }
-
-    @Override
-    public FireStation updateFireStation(String address, FireStation updatedFirestation) {
-        return null;
-    }
-
-    @Override
-    public FireStation addFirestation(FireStation firestation) {
+    public void addFireStation(FireStation fireStation) {
         List<FireStation> fireStations = dataLoader.getFireStations();
-        fireStations.add(firestation);
+        fireStations.add(fireStation);
         dataLoader.setFireStations(fireStations); // persist to file
-        return firestation;
     }
 
     @Override
-    public FireStation updateFirestation(String address, FireStation updatedFirestation) {
+    public FireStation updateFireStation(String address, FireStation updatedFireStation) {
         List<FireStation> fireStations = dataLoader.getFireStations();
         for (FireStation current : fireStations) {
-            if (current.getAddress().equals(address)) {
-                current.setStation(updatedFirestation.getStation());
+            if (current.getAddress().equalsIgnoreCase(address)) {
+                current.setStation(updatedFireStation.getStation());
                 dataLoader.setFireStations(fireStations); // persist to file
                 return current;
             }
@@ -55,7 +44,7 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     @Override
     public boolean deleteFireStation(String address) {
         List<FireStation> fireStations = dataLoader.getFireStations();
-        boolean removed = fireStations.removeIf(f -> f.getAddress().equals(address));
+        boolean removed = fireStations.removeIf(f -> f.getAddress().equalsIgnoreCase(address));
         if (removed) {
             dataLoader.setFireStations(fireStations); // persist to file
         }

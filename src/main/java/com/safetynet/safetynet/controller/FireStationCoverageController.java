@@ -22,7 +22,7 @@ public class FireStationCoverageController {
      * Fetches coverage information for a given fire station number.
      * Returns a DTO containing the list of persons covered and counts of adults and children.
      */
-    @GetMapping("/firestation")
+    @GetMapping(value = "/firestation", params = "stationNumber")
     @Operation(summary = "Get firestation coverage by station number")
     public FireStationCoverageDTO getCoverage(@RequestParam String stationNumber) {
         log.info("Fetching coverage for station {}", stationNumber);

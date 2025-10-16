@@ -16,9 +16,9 @@ public class FireStationService {
 
     private final FireStationRepository firestationRepository;
 
-    public FireStation addFireStation(FireStation firestation) {
+    public void addFireStation(FireStation firestation) {
         log.debug("Adding fire station at address: {}", firestation.getAddress());
-        return firestationRepository.addFireStation(firestation);
+        firestationRepository.addFireStation(firestation);
     }
 
     public FireStation updateFireStation(String address, FireStation updatedFireStation) {

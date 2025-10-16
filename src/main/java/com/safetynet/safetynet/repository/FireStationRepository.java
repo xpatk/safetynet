@@ -5,12 +5,7 @@ import java.util.List;
 
 public interface FireStationRepository {
     List<FireStation> getAllFireStations();
-    FireStation addFireStation(FireStation firestation);
-    FireStation updateFireStation(String address, FireStation updatedFirestation);
-
-    FireStation addFirestation(FireStation firestation);
-
-    FireStation updateFirestation(String address, FireStation updatedFirestation);
-
+    void addFireStation(FireStation fireStation);
+    FireStation updateFireStation(String address, FireStation updatedFireStation);
     boolean deleteFireStation(String address);
 }
