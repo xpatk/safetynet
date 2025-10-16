@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -36,15 +37,16 @@ public class DataLoader {
     private List<Person> persons;
 
     /** List of all fire stations and their assigned addresses. */
-    private List<FireStation> firestations;
+    private List<FireStation> fireStations;
 
     /** List of all medical records for the persons. */
-    private List<MedicalRecord> medicalrecords;
+    private List<MedicalRecord> medicalRecords;
 
     /**
      * Initializes the DataLoader by reading the JSON file
      * and deserializing its contents into in-memory lists.
      */
+
     public DataLoader() {
         loadData();
     }
@@ -60,14 +62,20 @@ public class DataLoader {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         try {
-            File jsonFile = new File(JSON_FILE_PATH);
-            DataDTO dataDTO = objectMapper.readValue(jsonFile, DataDTO.class);
+            // Load JSON from resources folder
+            InputStream jsonStream = getClass().getClassLoader().getResourceAsStream("data.json");
+            if (jsonStream == null) {
+                log.error("data.json not found in resources!");
+                return;
+            }
+
+            DataDTO dataDTO = objectMapper.readValue(jsonStream, DataDTO.class);
             persons = dataDTO.getPersons();
-            firestations = dataDTO.getFireStations();
-            medicalrecords = dataDTO.getMedicalRecords();
-            log.info("Data successfully loaded from {}", JSON_FILE_PATH);
+            fireStations = dataDTO.getFireStations();
+            medicalRecords = dataDTO.getMedicalRecords();
+            log.info("Data successfully loaded from data.json");
         } catch (IOException e) {
-            log.error("Failed to load data from {}: {}", JSON_FILE_PATH, e.getMessage());
+            log.error("Failed to load data: {}", e.getMessage());
         }
     }
 
@@ -75,7 +83,7 @@ public class DataLoader {
      * Serializes and writes the current in-memory data to the JSON file.
      */
     private void writeDataToFile() {
-        DataDTO dataDTO = new DataDTO(persons, firestations, medicalrecords);
+        DataDTO dataDTO = new DataDTO(persons, fireStations, medicalRecords);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -104,10 +112,10 @@ public class DataLoader {
     /**
      * Updates the list of fire stations and persists the changes to file.
      *
-     * @param firestations the updated list of fire stations
+     * @param fireStations the updated list of fire stations
      */
-    public void setFireStations(List<FireStation> firestations) {
-        this.firestations = firestations;
+    public void setFireStations(List<FireStation> fireStations) {
+        this.fireStations = fireStations;
         writeDataToFile();
     }
 
@@ -117,7 +125,7 @@ public class DataLoader {
      * @param medicalRecords the updated list of medical records
      */
     public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
-        this.medicalrecords = medicalRecords;
+        this.medicalRecords = medicalRecords;
         writeDataToFile();
     }
 }

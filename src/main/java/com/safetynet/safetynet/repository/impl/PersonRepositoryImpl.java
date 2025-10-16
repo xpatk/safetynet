@@ -17,7 +17,11 @@ public class PersonRepositoryImpl implements PersonRepository {
     }
 
     private List<Person> getPersons() {
-        return dataLoader.getPersons();
+        List<Person> persons = dataLoader.getPersons();
+        if (persons == null) {
+            return List.of();
+        }
+        return persons;
     }
 
     @Override
@@ -61,6 +65,10 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @Override
     public List<Person> getAllPersons() {
-        return List.copyOf(getPersons());
+        List<Person> persons = getPersons();
+        if (persons == null) {
+            return List.of();
+        }
+        return List.copyOf(persons);
     }
 }

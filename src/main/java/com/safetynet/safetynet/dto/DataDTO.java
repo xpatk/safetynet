@@ -1,5 +1,6 @@
 package com.safetynet.safetynet.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.safetynet.safetynet.model.Person;
 import com.safetynet.safetynet.model.FireStation;
 import com.safetynet.safetynet.model.MedicalRecord;
@@ -27,9 +28,11 @@ public class DataDTO {
     /**
      * List of fire stations and their associated addresses.
      */
+    @JsonProperty("firestations")
     private List<FireStation> fireStations;
     /**
      * List of medical records containing personal health information.
      */
+    @JsonProperty("medicalrecords")
     private List<MedicalRecord> medicalRecords;
 }

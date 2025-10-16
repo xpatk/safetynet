@@ -5,6 +5,7 @@ import com.safetynet.safetynet.repository.DataLoader;
 import com.safetynet.safetynet.repository.MedicalRecordRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -17,7 +18,8 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
     }
 
     private List<MedicalRecord> getMedicalRecords() {
-        return dataLoader.getMedicalrecords();
+        List<MedicalRecord> records = dataLoader.getMedicalRecords();
+        return records != null ? records : new ArrayList<>();
     }
 
     @Override

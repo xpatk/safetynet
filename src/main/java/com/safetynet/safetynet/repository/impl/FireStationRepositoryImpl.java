@@ -18,7 +18,7 @@ public class FireStationRepositoryImpl implements FireStationRepository {
 
     @Override
     public List<FireStation> getAllFireStations() {
-        return dataLoader.getFirestations();
+        return dataLoader.getFireStations();
     }
 
     @Override
@@ -33,19 +33,19 @@ public class FireStationRepositoryImpl implements FireStationRepository {
 
     @Override
     public FireStation addFirestation(FireStation firestation) {
-        List<FireStation> firestations = dataLoader.getFirestations();
-        firestations.add(firestation);
-        dataLoader.setFireStations(firestations); // persist to file
+        List<FireStation> fireStations = dataLoader.getFireStations();
+        fireStations.add(firestation);
+        dataLoader.setFireStations(fireStations); // persist to file
         return firestation;
     }
 
     @Override
     public FireStation updateFirestation(String address, FireStation updatedFirestation) {
-        List<FireStation> firestations = dataLoader.getFirestations();
-        for (FireStation current : firestations) {
+        List<FireStation> fireStations = dataLoader.getFireStations();
+        for (FireStation current : fireStations) {
             if (current.getAddress().equals(address)) {
                 current.setStation(updatedFirestation.getStation());
-                dataLoader.setFireStations(firestations); // persist to file
+                dataLoader.setFireStations(fireStations); // persist to file
                 return current;
             }
         }
@@ -54,10 +54,10 @@ public class FireStationRepositoryImpl implements FireStationRepository {
 
     @Override
     public boolean deleteFireStation(String address) {
-        List<FireStation> firestations = dataLoader.getFirestations();
-        boolean removed = firestations.removeIf(f -> f.getAddress().equals(address));
+        List<FireStation> fireStations = dataLoader.getFireStations();
+        boolean removed = fireStations.removeIf(f -> f.getAddress().equals(address));
         if (removed) {
-            dataLoader.setFireStations(firestations); // persist to file
+            dataLoader.setFireStations(fireStations); // persist to file
         }
         return removed;
     }
