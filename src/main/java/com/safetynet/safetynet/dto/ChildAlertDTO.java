@@ -26,7 +26,7 @@ public class ChildAlertDTO {
     /** List of children living at the given address. */
     private List<ChildInfo> children;
     /** List of other household members living at the same address. */
-    private List<HouseholdMember> otherHouseholdMembers;
+    private List<HouseholdMember> householdMembers;
 
     /**
      * Represents information about a child living at the address,

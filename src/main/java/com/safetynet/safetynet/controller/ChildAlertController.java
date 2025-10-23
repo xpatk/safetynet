@@ -36,7 +36,7 @@ public class ChildAlertController {
         log.info("Fetching child alert information for address: {}", address);
         ChildAlertDTO childAlert = childAlertService.getChildrenAtAddress(address);
 
-        if (childAlert == null || (childAlert.getChildren().isEmpty() && childAlert.getOtherHouseholdMembers().isEmpty())) {
+        if (childAlert == null || (childAlert.getChildren().isEmpty() && childAlert.getHouseholdMembers().isEmpty())) {
             log.warn("No child alert data found for address: {}", address);
             return ResponseEntity.notFound().build();
         }
