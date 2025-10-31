@@ -18,8 +18,14 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit tests for {@link FloodAlertService}.
+ * <p>
+ * Verifies that households and resident information are correctly retrieved
+ * and grouped by fire station coverage.
+ */
 @SpringBootTest
-public class FloodAlertServiceTest {
+class FloodAlertServiceTest {
 
     @MockitoBean
     private PersonService personService;
@@ -37,6 +43,9 @@ public class FloodAlertServiceTest {
     private List<MedicalRecord> mockMedicalRecords;
     private List<FireStation> mockFireStations;
 
+    /**
+     * Initializes mock data before each test.
+     */
     @BeforeEach
     void setUp() {
         // Fire stations
@@ -52,19 +61,25 @@ public class FloodAlertServiceTest {
                 new Person("Alice", "Smith", "2 Elm St", "City", "22222", "222-333-4444", "alice@smith.com")
         );
 
-        // Medical records
+        // Medical records (using LocalDate)
         mockMedicalRecords = List.of(
                 new MedicalRecord("John", "Doe", LocalDate.of(2015, 1, 1), List.of("med1"), List.of("allergy1")),
                 new MedicalRecord("Jane", "Doe", LocalDate.of(1990, 1, 1), List.of("med2"), List.of("allergy2")),
                 new MedicalRecord("Alice", "Smith", LocalDate.of(2005, 5, 5), List.of(), List.of())
         );
 
-        // Mocking service calls
+        // Mocking service responses
         when(fireStationService.getAllFireStations()).thenReturn(mockFireStations);
         when(personService.getAllPersons()).thenReturn(mockPersons);
         when(medicalRecordService.getAllMedicalRecords()).thenReturn(mockMedicalRecords);
     }
 
+    /**
+     * Tests {@link FloodAlertService#getHouseholdsByStations(List)}.
+     * <p>
+     * Verifies that households are correctly grouped by address
+     * and that age and person data are properly mapped.
+     */
     @Test
     void testGetHouseholdsByStations() {
         List<String> stations = List.of("1", "2");
@@ -72,7 +87,9 @@ public class FloodAlertServiceTest {
         FloodStationsDTO result = floodAlertService.getHouseholdsByStations(stations);
 
         assertThat(result).isNotNull();
+
         Map<String, List<HouseholdInfo>> households = result.getHouseholds();
+        assertThat(households).isNotEmpty();
 
         // Check addresses
         assertThat(households.keySet()).containsExactlyInAnyOrder("1 Dover St", "2 Elm St");
@@ -83,14 +100,17 @@ public class FloodAlertServiceTest {
         assertThat(doverHouse).anySatisfy(h -> assertThat(h.getFirstName()).isEqualTo("John"));
         assertThat(doverHouse).anySatisfy(h -> assertThat(h.getFirstName()).isEqualTo("Jane"));
 
-        // Check ages calculated correctly
-        HouseholdInfo john = doverHouse.stream().filter(h -> h.getFirstName().equals("John")).findFirst().orElse(null);
+        // Check John’s age calculation (should be <= 18)
+        HouseholdInfo john = doverHouse.stream()
+                .filter(h -> h.getFirstName().equals("John"))
+                .findFirst()
+                .orElse(null);
         assertThat(john).isNotNull();
         assertThat(john.getAge()).isLessThanOrEqualTo(18);
 
-        // Check Alice
+        // Check Alice at "2 Elm St"
         List<HouseholdInfo> elmHouse = households.get("2 Elm St");
         assertThat(elmHouse).hasSize(1);
-        assertThat(elmHouse.get(0).getFirstName()).isEqualTo("Alice");
+        assertThat(elmHouse.getFirst().getFirstName()).isEqualTo("Alice");
     }
 }
