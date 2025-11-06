@@ -19,6 +19,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Test class for {@link CommunityEmailController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test the controller endpoints in isolation with
+ * a mocked {@link CommunityEmailService}. Verifies behavior for successful requests,
+ * missing parameters, empty responses, and exceptions.
+ * </p>
+ */
 @WebMvcTest(CommunityEmailController.class)
 class CommunityEmailControllerTest {
 
@@ -30,6 +38,10 @@ class CommunityEmailControllerTest {
 
     private CommunityEmailDTO mockCommunityEmailDTO;
 
+    /**
+     * Sets up a mock {@link CommunityEmailDTO} before each test.
+     * Includes a city and a list of email addresses for testing.
+     */
     @BeforeEach
     void setUp() {
         mockCommunityEmailDTO = new CommunityEmailDTO();
@@ -37,6 +49,12 @@ class CommunityEmailControllerTest {
         mockCommunityEmailDTO.setEmails(List.of("john@doe.com", "jane@doe.com"));
     }
 
+    /**
+     * Tests the successful retrieval of community emails for a given city.
+     * Verifies the returned JSON contains the correct city and email addresses.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test success - retrieve emails for a city")
     void testGetCommunityEmailsSuccess() throws Exception {
@@ -52,6 +70,12 @@ class CommunityEmailControllerTest {
                 .andExpect(jsonPath("$.emails[1]").value("jane@doe.com"));
     }
 
+    /**
+     * Tests the scenario where no emails exist for the given city.
+     * Expects a 404 Not Found response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test 404 - no emails found")
     void testGetCommunityEmailsNotFound() throws Exception {
@@ -64,6 +88,12 @@ class CommunityEmailControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the scenario where the required "city" parameter is missing from the request.
+     * Expects a 400 Bad Request response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test 400 - missing city parameter")
     void testGetCommunityEmailsMissingCity() throws Exception {
@@ -71,6 +101,12 @@ class CommunityEmailControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the scenario where the service throws an exception during retrieval.
+     * Expects a 500 Internal Server Error response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test service exception")
     void testGetCommunityEmailsServiceException() throws Exception {

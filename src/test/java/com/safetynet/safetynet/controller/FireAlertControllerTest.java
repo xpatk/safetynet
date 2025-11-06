@@ -20,6 +20,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Test class for {@link FireAlertController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test the controller endpoints in isolation with
+ * a mocked {@link FireAlertService}. Verifies behavior for successful requests,
+ * missing parameters, empty responses, and service exceptions.
+ * </p>
+ */
 @WebMvcTest(FireAlertController.class)
 class FireAlertControllerTest {
 
@@ -31,6 +39,10 @@ class FireAlertControllerTest {
 
     private FireDTO mockFireDTO;
 
+    /**
+     * Sets up a mock {@link FireDTO} before each test.
+     * Includes a fire station number and residents with medications and allergies.
+     */
     @BeforeEach
     void setUp() {
         mockFireDTO = new FireDTO();
@@ -41,6 +53,12 @@ class FireAlertControllerTest {
         ));
     }
 
+    /**
+     * Tests successful retrieval of fire alert data for a given address.
+     * Verifies that the returned JSON contains the correct fire station number and resident details.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test success - retrieve fire info for an address")
     void testGetFireInfoSuccess() throws Exception {
@@ -64,6 +82,12 @@ class FireAlertControllerTest {
                 .andExpect(jsonPath("$.residents[1].age").value(25));
     }
 
+    /**
+     * Tests the scenario where no fire alert data exists for the given address.
+     * Expects a 404 Not Found response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test 404 - no fire info found")
     void testGetFireInfoNotFound() throws Exception {
@@ -76,6 +100,12 @@ class FireAlertControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the scenario where the required "address" parameter is missing from the request.
+     * Expects a 400 Bad Request response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test 400 - missing address parameter")
     void testGetFireInfoMissingAddress() throws Exception {
@@ -83,6 +113,12 @@ class FireAlertControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the scenario where the service throws an exception during retrieval.
+     * Expects a 500 Internal Server Error response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test service exception")
     void testGetFireInfoServiceException() throws Exception {

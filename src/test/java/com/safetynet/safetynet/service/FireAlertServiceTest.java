@@ -16,6 +16,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit tests for {@link FireAlertService}.
+ *
+ * <p>Verifies that fire alerts are correctly generated for a given address,
+ * including resident details, associated medical records, and fire station number.</p>
+ */
 @SpringBootTest
 class FireAlertServiceTest {
 
@@ -35,6 +41,9 @@ class FireAlertServiceTest {
     private List<MedicalRecord> mockMedicalRecords;
     private List<FireStation> mockFireStations;
 
+    /**
+     * Initializes mock data for persons, medical records, and fire stations before each test.
+     */
     @BeforeEach
     void setUp() {
         mockPersons = List.of(
@@ -53,6 +62,10 @@ class FireAlertServiceTest {
         );
     }
 
+    /**
+     * Test retrieving fire alert information for an address with valid data.
+     * Verifies resident details, medical records, and fire station number.
+     */
     @Test
     void testGetFireAlertByAddress_ValidData() {
         when(personService.getAllPersons()).thenReturn(mockPersons);
@@ -81,6 +94,10 @@ class FireAlertServiceTest {
         assertThat(jane.getAllergies()).isEmpty();
     }
 
+    /**
+     * Test scenario where no fire station is associated with the address.
+     * Fire station number should default to 0.
+     */
     @Test
     void testGetFireAlertByAddress_NoFireStationFound() {
         when(personService.getAllPersons()).thenReturn(mockPersons);
@@ -94,6 +111,10 @@ class FireAlertServiceTest {
         assertThat(result.getResidents()).hasSize(2);
     }
 
+    /**
+     * Test scenario where the fire station number is invalid (non-numeric).
+     * Fire station number should default to 0.
+     */
     @Test
     void testGetFireAlertByAddress_InvalidStationNumber() {
         when(personService.getAllPersons()).thenReturn(mockPersons);
@@ -107,6 +128,10 @@ class FireAlertServiceTest {
         assertThat(result.getFireStationNumber()).isEqualTo(0);
     }
 
+    /**
+     * Test scenario where medical records are missing.
+     * Resident ages and medical details should default to empty or zero values.
+     */
     @Test
     void testGetFireAlertByAddress_NoMedicalRecord() {
         when(personService.getAllPersons()).thenReturn(mockPersons);

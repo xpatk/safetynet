@@ -19,6 +19,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Test class for {@link ChildAlertController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test the controller endpoints in isolation with
+ * a mocked {@link ChildAlertService}. Verifies behavior for successful requests,
+ * missing parameters, empty responses, and exceptions.
+ * </p>
+ */
 @WebMvcTest(ChildAlertController.class)
 class ChildAlertControllerTest {
 
@@ -30,6 +38,10 @@ class ChildAlertControllerTest {
 
     private ChildAlertDTO mockChildAlertDTO;
 
+    /**
+     * Sets up a mock {@link ChildAlertDTO} before each test.
+     * Includes two children and two household members for testing.
+     */
     @BeforeEach
     void setUp() {
         mockChildAlertDTO = new ChildAlertDTO();
@@ -45,6 +57,12 @@ class ChildAlertControllerTest {
         ));
     }
 
+    /**
+     * Tests the successful retrieval of child alert data for a given address.
+     * Verifies the returned JSON contains the correct children and household members.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test success - retrieve children for address")
     void testGetChildAlertSuccess() throws Exception {
@@ -68,6 +86,12 @@ class ChildAlertControllerTest {
                 .andExpect(jsonPath("$.householdMembers[1].lastName").value("Doe"));
     }
 
+    /**
+     * Tests the scenario where no child alert data exists for the given address.
+     * Expects a 404 Not Found response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test 404 - no child alert data")
     void testGetChildAlertNotFound() throws Exception {
@@ -80,6 +104,12 @@ class ChildAlertControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the scenario where the required "address" parameter is missing from the request.
+     * Expects a 400 Bad Request response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test 400 - missing address parameter")
     void testGetChildAlertMissingAddress() throws Exception {
@@ -87,6 +117,12 @@ class ChildAlertControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the scenario where the service throws an exception during retrieval.
+     * Expects a 500 Internal Server Error response.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("Test service exception")
     void testGetChildAlertServiceException() throws Exception {

@@ -14,6 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link PersonService}.
+ *
+ * <p>Verifies the CRUD operations for persons and proper exception handling
+ * when required fields are missing or entities are not found.</p>
+ */
 @SpringBootTest
 public class PersonServiceTest {
 
@@ -25,6 +31,9 @@ public class PersonServiceTest {
 
     private Person johnDoe;
 
+    /**
+     * Sets up a mock person before each test.
+     */
     @BeforeEach
     void setUp() {
         johnDoe = new Person("John", "Doe", "123 Main St", "City", "11111", "john@doe.com", "123-456-7890");

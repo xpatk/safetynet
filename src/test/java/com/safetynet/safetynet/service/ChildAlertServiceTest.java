@@ -17,7 +17,9 @@ import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for {@link ChildAlertService}.
- * Verifies detection of children and household members for a given address.
+ *
+ * <p>Verifies the behavior of {@link ChildAlertService} methods for retrieving
+ * children and household members at a given address, as well as age calculation.</p>
  */
 @SpringBootTest
 public class ChildAlertServiceTest {
@@ -34,6 +36,9 @@ public class ChildAlertServiceTest {
     private List<Person> mockPersons;
     private List<MedicalRecord> mockMedicalRecords;
 
+    /**
+     * Initializes mock data for persons and medical records before each test.
+     */
     @BeforeEach
     void setUpForTest() {
         mockPersons = List.of(
@@ -47,16 +52,17 @@ public class ChildAlertServiceTest {
         );
     }
 
+    /**
+     * Test retrieving children at a specific address when children are present.
+     * Verifies both children and household members are correctly identified.
+     */
     @Test
     void testGetChildrenAtAddress_WithChildrenPresent() {
-        // GIVEN
         when(personService.getAllPersons()).thenReturn(mockPersons);
         when(medicalRecordService.getAllMedicalRecords()).thenReturn(mockMedicalRecords);
 
-        // WHEN
         ChildAlertDTO result = childAlertService.getChildrenAtAddress("1 Dover St");
 
-        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getChildren()).hasSize(1);
         assertThat(result.getChildren().get(0).getFirstName()).isEqualTo("John");
@@ -70,9 +76,12 @@ public class ChildAlertServiceTest {
         verify(medicalRecordService, times(1)).getAllMedicalRecords();
     }
 
+    /**
+     * Test retrieving children at an address where no children are present.
+     * Ensures that both children and household members lists are empty.
+     */
     @Test
     void testGetChildrenAtAddress_NoChildrenFound() {
-        // GIVEN - only adults
         mockMedicalRecords = List.of(
                 new MedicalRecord("John", "Doe", LocalDate.of(1985, 1, 1), List.of(), List.of()),
                 new MedicalRecord("Jane", "Doe", LocalDate.of(1990, 1, 1), List.of(), List.of())
@@ -80,36 +89,41 @@ public class ChildAlertServiceTest {
         when(personService.getAllPersons()).thenReturn(mockPersons);
         when(medicalRecordService.getAllMedicalRecords()).thenReturn(mockMedicalRecords);
 
-        // WHEN
         ChildAlertDTO result = childAlertService.getChildrenAtAddress("1 Dover St");
 
-        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getChildren()).isEmpty();
         assertThat(result.getHouseholdMembers()).isEmpty();
     }
 
+    /**
+     * Test retrieving children at an unknown address.
+     * Should return empty lists for both children and household members.
+     */
     @Test
     void testGetChildrenAtAddress_UnknownAddress() {
-        // GIVEN
         when(personService.getAllPersons()).thenReturn(List.of());
         when(medicalRecordService.getAllMedicalRecords()).thenReturn(List.of());
 
-        // WHEN
         ChildAlertDTO result = childAlertService.getChildrenAtAddress("999 Nowhere Rd");
 
-        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getChildren()).isEmpty();
         assertThat(result.getHouseholdMembers()).isEmpty();
     }
 
+    /**
+     * Test that the age calculation method returns the correct age for a valid birthdate.
+     */
     @Test
     void testCalculateAge_ShouldReturnValidAge() {
         int age = childAlertService.calculateAge(LocalDate.now().minusYears(20));
         assertThat(age).isEqualTo(20);
     }
 
+    /**
+     * Test that the age calculation method returns 0 if the birthdate is null.
+     */
     @Test
     void testCalculateAge_ShouldReturnZeroWhenNull() {
         int age = childAlertService.calculateAge(null);

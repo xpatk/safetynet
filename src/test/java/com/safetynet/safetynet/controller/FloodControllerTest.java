@@ -19,6 +19,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for {@link FloodController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test the flood alert endpoints in isolation with a mocked {@link FloodAlertService}.
+ * Verifies behavior for retrieving households covered by specific fire station numbers.
+ * </p>
+ */
 @WebMvcTest(FloodController.class)
 class FloodControllerTest {
 
@@ -33,6 +40,9 @@ class FloodControllerTest {
 
     private FloodStationsDTO mockFloodData;
 
+    /**
+     * Initializes mock flood alert data before each test.
+     */
     @BeforeEach
     void setUp() {
         HouseholdInfo resident1 = new HouseholdInfo("John", "Doe", "123-456-7890", 35,
@@ -45,6 +55,11 @@ class FloodControllerTest {
         ));
     }
 
+    /**
+     * Tests retrieval of households by fire station numbers successfully.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("GET /flood/stations - Success")
     void testGetHouseholdsByStationsSuccess() throws Exception {
@@ -64,6 +79,11 @@ class FloodControllerTest {
                 .andExpect(jsonPath("$.households['123 Main St'][1].firstName").value("Jane"));
     }
 
+    /**
+     * Tests the behavior when no households are found for the given fire station numbers.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("GET /flood/stations - Not Found")
     void testGetHouseholdsByStationsNotFound() throws Exception {
@@ -76,6 +96,11 @@ class FloodControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the behavior when the stations parameter is missing.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("GET /flood/stations - Missing parameter")
     void testGetHouseholdsMissingParams() throws Exception {

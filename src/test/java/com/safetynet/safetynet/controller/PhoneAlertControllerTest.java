@@ -17,6 +17,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for {@link PhoneAlertController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test phone alert endpoints in isolation
+ * with a mocked {@link PhoneAlertService}. Verifies retrieval of phone numbers
+ * for residents covered by a given fire station.
+ * </p>
+ */
 @WebMvcTest(PhoneAlertController.class)
 class PhoneAlertControllerTest {
 
@@ -31,11 +39,19 @@ class PhoneAlertControllerTest {
 
     private PhoneAlertDTO mockPhoneAlertDTO;
 
+    /**
+     * Initializes mock phone alert data before each test.
+     */
     @BeforeEach
     void setUp() {
         mockPhoneAlertDTO = new PhoneAlertDTO(List.of("123-456-7890", "098-765-4321"));
     }
 
+    /**
+     * Tests retrieval of phone numbers successfully when residents are found.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("GET /phoneAlert - Success")
     void testGetPhoneAlertSuccess() throws Exception {
@@ -50,11 +66,17 @@ class PhoneAlertControllerTest {
                 .andExpect(jsonPath("$.phoneNumbers[1]").value("098-765-4321"));
     }
 
+    /**
+     * Tests retrieval of phone numbers when no residents are found (empty list).
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("GET /phoneAlert - Empty list (no residents found)")
     void testGetPhoneAlertEmptyPhones() throws Exception {
         String stationNumber = "99";
-        when(phoneAlertService.getPhonesByFireStation(stationNumber)).thenReturn(new PhoneAlertDTO(List.of()));
+        when(phoneAlertService.getPhonesByFireStation(stationNumber))
+                .thenReturn(new PhoneAlertDTO(List.of()));
 
         mockMvc.perform(get("/phoneAlert")
                         .param("fireStation", stationNumber))

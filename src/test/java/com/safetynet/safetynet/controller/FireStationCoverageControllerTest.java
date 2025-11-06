@@ -18,6 +18,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for {@link FireStationCoverageController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test the fire station coverage endpoints in isolation with a mocked {@link FireStationCoverageService}.
+ * Verifies behavior for retrieving fire station coverage data by station number, including adult/child counts and person details.
+ * </p>
+ */
 @WebMvcTest(FireStationCoverageController.class)
 class FireStationCoverageControllerTest {
 
@@ -32,6 +39,9 @@ class FireStationCoverageControllerTest {
 
     private FireStationCoverageDTO mockCoverageDTO;
 
+    /**
+     * Initializes a sample {@link FireStationCoverageDTO} object before each test.
+     */
     @BeforeEach
     void setUp() {
         mockCoverageDTO = new FireStationCoverageDTO();
@@ -43,6 +53,11 @@ class FireStationCoverageControllerTest {
         ));
     }
 
+    /**
+     * Tests retrieval of fire station coverage by station number successfully.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("GET firestation coverage by station number - Success")
     void testGetCoverageSuccess() throws Exception {
@@ -65,6 +80,11 @@ class FireStationCoverageControllerTest {
                 .andExpect(jsonPath("$.persons[1].phone").value("123-456-7891"));
     }
 
+    /**
+     * Tests the behavior when the station number parameter is missing.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("GET firestation coverage missing station number - Bad Request")
     void testGetCoverageMissingParam() throws Exception {

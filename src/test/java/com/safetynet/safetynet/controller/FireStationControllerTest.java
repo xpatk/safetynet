@@ -11,11 +11,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.util.List;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for {@link FireStationController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test controller endpoints in isolation with a mocked {@link FireStationService}.
+ * Verifies behavior for CRUD operations: retrieving, adding, updating, and deleting fire station mappings.
+ * </p>
+ */
 @WebMvcTest(FireStationController.class)
 class FireStationControllerTest {
 
@@ -30,6 +39,9 @@ class FireStationControllerTest {
 
     private FireStation station;
 
+    /**
+     * Initializes a sample {@link FireStation} object before each test.
+     */
     @BeforeEach
     void setUp() {
         station = new FireStation();
@@ -37,6 +49,11 @@ class FireStationControllerTest {
         station.setStation("1");
     }
 
+    /**
+     * Tests retrieval of all fire stations.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("GET all fire stations")
     void testGetAllFireStations() throws Exception {
@@ -48,6 +65,11 @@ class FireStationControllerTest {
                 .andExpect(jsonPath("$[0].station").value("1"));
     }
 
+    /**
+     * Tests adding a new fire station.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("POST add a fire station")
     void testAddFireStation() throws Exception {
@@ -62,6 +84,11 @@ class FireStationControllerTest {
         verify(fireStationService, times(1)).addFireStation(station);
     }
 
+    /**
+     * Tests updating a fire station successfully.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("PUT update fire station successfully")
     void testUpdateFireStationSuccess() throws Exception {
@@ -75,6 +102,11 @@ class FireStationControllerTest {
                 .andExpect(content().string("Fire station mapping updated successfully."));
     }
 
+    /**
+     * Tests updating a fire station that does not exist.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("PUT update fire station not found")
     void testUpdateFireStationNotFound() throws Exception {
@@ -88,6 +120,11 @@ class FireStationControllerTest {
                 .andExpect(content().string("Fire station mapping not found."));
     }
 
+    /**
+     * Tests deleting a fire station successfully.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("DELETE fire station successfully")
     void testDeleteFireStationSuccess() throws Exception {
@@ -98,6 +135,11 @@ class FireStationControllerTest {
                 .andExpect(content().string("Fire station mapping deleted successfully."));
     }
 
+    /**
+     * Tests deleting a fire station that does not exist.
+     *
+     * @throws Exception if the request execution fails
+     */
     @Test
     @DisplayName("DELETE fire station not found")
     void testDeleteFireStationNotFound() throws Exception {

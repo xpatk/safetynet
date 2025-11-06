@@ -16,7 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Test class for FireStationCoverageService.
+ * Unit tests for {@link FireStationCoverageService}.
+ *
+ * <p>Verifies that the service correctly calculates the coverage of a fire station,
+ * including the number of adults, children, and the details of all residents served
+ * by a given station.</p>
  */
 @SpringBootTest
 public class FireStationCoverageServiceTest {
@@ -36,6 +40,9 @@ public class FireStationCoverageServiceTest {
     private List<Person> mockPersons;
     private List<MedicalRecord> mockMedicalRecords;
 
+    /**
+     * Sets up mock data for persons and medical records before each test.
+     */
     @BeforeEach
     void setUp() {
         mockPersons = List.of(
@@ -49,6 +56,11 @@ public class FireStationCoverageServiceTest {
         );
     }
 
+    /**
+     * Test retrieving fire station coverage by station number.
+     * Verifies that the correct number of adults and children is calculated
+     * and that resident details are correctly returned.
+     */
     @Test
     void testGetCoverageByStation() {
         // GIVEN

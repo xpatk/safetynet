@@ -4,7 +4,6 @@ import com.safetynet.safetynet.dto.CommunityEmailDTO;
 import com.safetynet.safetynet.model.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -15,9 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit test for {@link CommunityEmailService}.
- * Verifies that the service correctly filters and retrieves
- * unique email addresses of persons living in a given city.
+ * Unit tests for {@link CommunityEmailService}.
+ *
+ * <p>Verifies that the service correctly retrieves unique email addresses
+ * of persons living in a specified city, including handling of null emails
+ * and case-insensitive city names.</p>
  */
 @SpringBootTest
 class CommunityEmailServiceTest {
@@ -30,6 +31,9 @@ class CommunityEmailServiceTest {
 
     private List<Person> mockPersons;
 
+    /**
+     * Initializes mock person data before each test.
+     */
     @BeforeEach
     void setUp() {
         mockPersons = List.of(
@@ -40,44 +44,47 @@ class CommunityEmailServiceTest {
         );
     }
 
+    /**
+     * Test retrieving emails from a city with multiple valid email addresses.
+     * Ensures only valid emails are returned.
+     */
     @Test
     void testGetEmailsByCity_WithMultipleValidEmails() {
-        // GIVEN
         when(personService.getAllPersons()).thenReturn(mockPersons);
 
-        // WHEN
         CommunityEmailDTO result = communityEmailService.getEmailsByCity("Miami");
 
-        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getCity()).isEqualTo("Miami");
-        assertThat(result.getEmails()).hasSize(2); // john@doe.com and jane@doe.com
+        assertThat(result.getEmails()).hasSize(2);
         assertThat(result.getEmails()).containsExactlyInAnyOrder("john@doe.com", "jane@doe.com");
     }
 
+    /**
+     * Test retrieving emails for a city with no matching persons.
+     * Should return an empty email list.
+     */
     @Test
     void testGetEmailsByCity_NoMatchFound() {
-        // GIVEN
         when(personService.getAllPersons()).thenReturn(mockPersons);
 
-        // WHEN
         CommunityEmailDTO result = communityEmailService.getEmailsByCity("Tampa");
 
-        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getCity()).isEqualTo("Tampa");
         assertThat(result.getEmails()).isEmpty();
     }
 
+    /**
+     * Test that city name matching is case-insensitive.
+     * Emails for "Miami" should be returned even if the input is lowercase.
+     */
     @Test
     void testGetEmailsByCity_CaseInsensitive() {
-        // GIVEN
         when(personService.getAllPersons()).thenReturn(mockPersons);
 
-        // WHEN
         CommunityEmailDTO result = communityEmailService.getEmailsByCity("miami");
 
-        // THEN
         assertThat(result).isNotNull();
         assertThat(result.getCity()).isEqualTo("miami");
         assertThat(result.getEmails()).containsExactlyInAnyOrder("john@doe.com", "jane@doe.com");

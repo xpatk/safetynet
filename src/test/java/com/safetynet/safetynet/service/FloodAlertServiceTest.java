@@ -20,9 +20,10 @@ import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for {@link FloodAlertService}.
- * <p>
- * Verifies that households and resident information are correctly retrieved
- * and grouped by fire station coverage.
+ *
+ * <p>Verifies that households and resident information are correctly retrieved
+ * and grouped by fire station coverage, including proper age calculations
+ * and correct mapping of medications and allergies.</p>
  */
 @SpringBootTest
 class FloodAlertServiceTest {
@@ -45,6 +46,9 @@ class FloodAlertServiceTest {
 
     /**
      * Initializes mock data before each test.
+     * <p>
+     * Creates persons, fire stations, and medical records, and
+     * mocks service methods to return this data.
      */
     @BeforeEach
     void setUp() {
@@ -61,7 +65,7 @@ class FloodAlertServiceTest {
                 new Person("Alice", "Smith", "2 Elm St", "City", "22222", "222-333-4444", "alice@smith.com")
         );
 
-        // Medical records (using LocalDate)
+        // Medical records
         mockMedicalRecords = List.of(
                 new MedicalRecord("John", "Doe", LocalDate.of(2015, 1, 1), List.of("med1"), List.of("allergy1")),
                 new MedicalRecord("Jane", "Doe", LocalDate.of(1990, 1, 1), List.of("med2"), List.of("allergy2")),
@@ -76,9 +80,13 @@ class FloodAlertServiceTest {
 
     /**
      * Tests {@link FloodAlertService#getHouseholdsByStations(List)}.
-     * <p>
-     * Verifies that households are correctly grouped by address
-     * and that age and person data are properly mapped.
+     *
+     * <p>Verifies that:
+     * <ul>
+     *     <li>Households are correctly grouped by address.</li>
+     *     <li>Persons are properly mapped with first name, age, medications, and allergies.</li>
+     *     <li>Children’s ages are correctly calculated.</li>
+     * </ul>
      */
     @Test
     void testGetHouseholdsByStations() {

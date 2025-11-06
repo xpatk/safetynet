@@ -18,6 +18,13 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for {@link PersonController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test person endpoints in isolation
+ * with a mocked {@link PersonService}. Verifies CRUD operations for persons.
+ * </p>
+ */
 @WebMvcTest(PersonController.class)
 class PersonControllerTest {
 
@@ -33,6 +40,9 @@ class PersonControllerTest {
     private Person mockPerson;
     private Person updatedPerson;
 
+    /**
+     * Initializes mock person data before each test.
+     */
     @BeforeEach
     void setUp() {
         mockPerson = new Person();
@@ -54,6 +64,11 @@ class PersonControllerTest {
         updatedPerson.setEmail("john.new@example.com");
     }
 
+    /**
+     * Tests retrieval of all persons successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("GET all persons - Success")
     void testGetAllPersonsSuccess() throws Exception {
@@ -70,6 +85,11 @@ class PersonControllerTest {
                 .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
     }
 
+    /**
+     * Tests creation of a new person successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("POST person - Success")
     void testAddPersonSuccess() throws Exception {
@@ -84,6 +104,11 @@ class PersonControllerTest {
         verify(personService, times(1)).addPerson(any(Person.class));
     }
 
+    /**
+     * Tests updating an existing person successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("PUT person - Success")
     void testUpdatePersonSuccess() throws Exception {
@@ -97,6 +122,11 @@ class PersonControllerTest {
                 .andExpect(content().string("Person updated successfully."));
     }
 
+    /**
+     * Tests updating a non-existing person (not found scenario).
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("PUT person - Not Found")
     void testUpdatePersonNotFound() throws Exception {
@@ -109,6 +139,11 @@ class PersonControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests deletion of a person successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("DELETE person - Success")
     void testDeletePersonSuccess() throws Exception {
@@ -119,6 +154,11 @@ class PersonControllerTest {
                 .andExpect(content().string("Person deleted successfully."));
     }
 
+    /**
+     * Tests deletion of a non-existing person (not found scenario).
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("DELETE person - Not Found")
     void testDeletePersonNotFound() throws Exception {

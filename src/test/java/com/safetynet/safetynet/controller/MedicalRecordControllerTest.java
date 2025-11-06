@@ -19,6 +19,13 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Test class for {@link MedicalRecordController}.
+ * <p>
+ * Uses {@link WebMvcTest} to test medical record endpoints in isolation
+ * with a mocked {@link MedicalRecordService}. Verifies CRUD operations for medical records.
+ * </p>
+ */
 @WebMvcTest(MedicalRecordController.class)
 class MedicalRecordControllerTest {
 
@@ -34,23 +41,31 @@ class MedicalRecordControllerTest {
     private MedicalRecord mockRecord;
     private MedicalRecord updatedRecord;
 
+    /**
+     * Initializes mock medical record data before each test.
+     */
     @BeforeEach
     void setUp() {
         mockRecord = new MedicalRecord();
         mockRecord.setFirstName("John");
         mockRecord.setLastName("Doe");
-        mockRecord.setBirthdate(LocalDate.parse("01/01/1990"));
+        mockRecord.setBirthdate(LocalDate.parse("1990-01-01"));
         mockRecord.setMedications(List.of("aznol:350mg"));
         mockRecord.setAllergies(List.of("peanut"));
 
         updatedRecord = new MedicalRecord();
         updatedRecord.setFirstName("John");
         updatedRecord.setLastName("Doe");
-        updatedRecord.setBirthdate(LocalDate.parse("01/01/1990"));
+        updatedRecord.setBirthdate(LocalDate.parse("1990-01-01"));
         updatedRecord.setMedications(List.of("ibuprofen:200mg"));
         updatedRecord.setAllergies(List.of("strawberry"));
     }
 
+    /**
+     * Tests retrieval of all medical records successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("GET all medical records - Success")
     void testGetAllMedicalRecordsSuccess() throws Exception {
@@ -60,11 +75,16 @@ class MedicalRecordControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName").value("John"))
                 .andExpect(jsonPath("$[0].lastName").value("Doe"))
-                .andExpect(jsonPath("$[0].birthdate").value("01/01/1990"))
+                .andExpect(jsonPath("$[0].birthdate").value("1990-01-01"))
                 .andExpect(jsonPath("$[0].medications[0]").value("aznol:350mg"))
                 .andExpect(jsonPath("$[0].allergies[0]").value("peanut"));
     }
 
+    /**
+     * Tests creation of a new medical record.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("POST medical record - Created")
     void testAddMedicalRecordCreated() throws Exception {
@@ -79,6 +99,11 @@ class MedicalRecordControllerTest {
         verify(medicalRecordService, times(1)).addMedicalRecord(any(MedicalRecord.class));
     }
 
+    /**
+     * Tests updating an existing medical record successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("PUT medical record - Success")
     void testUpdateMedicalRecordSuccess() throws Exception {
@@ -92,6 +117,11 @@ class MedicalRecordControllerTest {
                 .andExpect(content().string("The medical record has been updated successfully."));
     }
 
+    /**
+     * Tests updating a non-existing medical record (not found scenario).
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("PUT medical record - Not Found")
     void testUpdateMedicalRecordNotFound() throws Exception {
@@ -105,6 +135,11 @@ class MedicalRecordControllerTest {
                 .andExpect(content().string("The medical record not found."));
     }
 
+    /**
+     * Tests deletion of a medical record successfully.
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("DELETE medical record - Success")
     void testDeleteMedicalRecordSuccess() throws Exception {
@@ -115,6 +150,11 @@ class MedicalRecordControllerTest {
                 .andExpect(content().string("The medical record has been successfully deleted."));
     }
 
+    /**
+     * Tests deletion of a non-existing medical record (not found scenario).
+     *
+     * @throws Exception if request execution fails
+     */
     @Test
     @DisplayName("DELETE medical record - Not Found")
     void testDeleteMedicalRecordNotFound() throws Exception {
