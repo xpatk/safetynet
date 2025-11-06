@@ -10,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for managing child alert data.
+ * Provides an endpoint to retrieve information about children and
+ * other household members living at a specified address.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/childAlert")
@@ -19,15 +24,17 @@ public class ChildAlertController {
     private final ChildAlertService childAlertService;
 
     /**
-     * GET endpoint to retrieve a list of children and other household members
-     * for a given address.
+     * Retrieves a list of children and household members for a given address.
      *
      * @param address the address to search for children and household members
-     * @return a {@link ChildAlertDTO} containing children and household members
+     * @return a {@link ChildAlertDTO} containing lists of children and other residents,
+     *         or HTTP 404 if no data is found
      */
     @GetMapping
-    @Operation(summary = "Get children and household members by address",
-            description = "Returns a list of children (with age) and the other members of the household at the given address.")
+    @Operation(
+            summary = "Get children and household members by address",
+            description = "Returns a list of children (with their ages) and other members of the household living at the specified address."
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Child alert data retrieved successfully."),
             @ApiResponse(responseCode = "404", description = "No data found for the given address.")

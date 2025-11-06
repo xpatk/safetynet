@@ -11,9 +11,7 @@ import java.util.List;
 
 /**
  * REST controller for managing {@link Person} entities.
- * <p>
  * Provides CRUD endpoints to create, read, update, and delete persons.
- * </p>
  */
 @Slf4j
 @RestController

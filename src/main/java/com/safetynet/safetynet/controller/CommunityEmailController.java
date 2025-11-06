@@ -10,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for managing community email retrieval.
+ * Provides an endpoint to retrieve all email addresses of residents
+ * living in a specific city.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/communityEmail")
@@ -19,14 +24,17 @@ public class CommunityEmailController {
     private final CommunityEmailService communityEmailService;
 
     /**
-     * GET endpoint to retrieve all email addresses of inhabitants for a given city.
+     * Retrieves all email addresses of inhabitants for a given city.
      *
-     * @param city the name of the city
-     * @return a {@link CommunityEmailDTO} containing the city and its email list
+     * @param city the name of the city to search for
+     * @return a {@link CommunityEmailDTO} containing the city name and the list of email addresses,
+     *         or HTTP 404 if no emails are found
      */
     @GetMapping
-    @Operation(summary = "Get all email addresses by city",
-            description = "Returns a list of email addresses for all residents living in the specified city.")
+    @Operation(
+            summary = "Get all email addresses by city",
+            description = "Returns a list of email addresses for all residents living in the specified city."
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Emails retrieved successfully."),
             @ApiResponse(responseCode = "404", description = "No emails found for the given city.")

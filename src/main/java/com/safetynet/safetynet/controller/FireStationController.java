@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * REST controller that manages FireStation mappings.
- * Provides endpoints to create, update, delete, and retrieve fire station mappings
- * between station numbers and addresses.
+ * REST controller for managing {@link FireStation} entities.
+ * Provides CRUD endpoints to create, read, update, and delete
+ * fire station mappings between station numbers and addresses.
  */
 @Slf4j
 @RestController
@@ -26,6 +26,11 @@ public class FireStationController {
 
     private final FireStationService fireStationService;
 
+    /**
+     * Retrieves all fire station mappings.
+     *
+     * @return list of all {@link FireStation} mappings
+     */
     @GetMapping
     @Operation(summary = "Get all fire stations")
     public ResponseEntity<List<FireStation>> getAllFireStations() {
@@ -33,6 +38,12 @@ public class FireStationController {
         return ResponseEntity.ok(fireStationService.getAllFireStations());
     }
 
+    /**
+     * Adds a new fire station mapping.
+     *
+     * @param fireStation the {@link FireStation} object to add
+     * @return confirmation message with HTTP 201 status
+     */
     @PostMapping
     @Operation(summary = "Add a new fire station mapping")
     @ApiResponses({
@@ -45,6 +56,13 @@ public class FireStationController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Fire station mapping created successfully.");
     }
 
+    /**
+     * Updates an existing fire station mapping for a given address.
+     *
+     * @param address        the address of the fire station mapping to update
+     * @param updatedStation the updated {@link FireStation} details
+     * @return confirmation message or HTTP 404 if the mapping is not found
+     */
     @PutMapping("/{address}")
     @Operation(summary = "Update station number for a fire station mapping")
     @ApiResponses({
@@ -64,6 +82,12 @@ public class FireStationController {
         return ResponseEntity.ok("Fire station mapping updated successfully.");
     }
 
+    /**
+     * Deletes a fire station mapping for a given address.
+     *
+     * @param address the address of the fire station mapping to delete
+     * @return confirmation message or HTTP 404 if the mapping is not found
+     */
     @DeleteMapping("/{address}")
     @Operation(summary = "Delete a fire station mapping")
     @ApiResponses({
