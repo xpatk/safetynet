@@ -14,12 +14,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for {@link PersonController}.
+ *
  * <p>
  * Uses {@link WebMvcTest} to test person endpoints in isolation
  * with a mocked {@link PersonService}. Verifies CRUD operations for persons.
@@ -88,12 +90,17 @@ class PersonControllerTest {
     /**
      * Tests creation of a new person successfully.
      *
+     * <p>
+     * Corrected to use thenReturn() instead of doNothing() because addPerson
+     * returns a Person object instead of being void.
+     * </p>
+     *
      * @throws Exception if request execution fails
      */
     @Test
     @DisplayName("POST person - Success")
     void testAddPersonSuccess() throws Exception {
-        doNothing().when(personService).addPerson(any(Person.class));
+        when(personService.addPerson(any(Person.class))).thenReturn(mockPerson);
 
         mockMvc.perform(post("/persons")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -13,6 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -38,27 +39,33 @@ class MedicalRecordControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private MedicalRecord mockRecord;
-    private MedicalRecord updatedRecord;
+    private MedicalRecord johnBoyd;
+    private MedicalRecord jacobBoyd;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     /**
      * Initializes mock medical record data before each test.
+     * <p>
+     * Matches the structure of the actual JSON data from the application.
+     * </p>
      */
     @BeforeEach
     void setUp() {
-        mockRecord = new MedicalRecord();
-        mockRecord.setFirstName("John");
-        mockRecord.setLastName("Doe");
-        mockRecord.setBirthdate(LocalDate.parse("1990-01-01"));
-        mockRecord.setMedications(List.of("aznol:350mg"));
-        mockRecord.setAllergies(List.of("peanut"));
+        johnBoyd = new MedicalRecord(
+                "John",
+                "Boyd",
+                LocalDate.parse("03/06/1984", formatter),
+                List.of("aznol:350mg", "hydrapermazol:100mg"),
+                List.of("nillacilan")
+        );
 
-        updatedRecord = new MedicalRecord();
-        updatedRecord.setFirstName("John");
-        updatedRecord.setLastName("Doe");
-        updatedRecord.setBirthdate(LocalDate.parse("1990-01-01"));
-        updatedRecord.setMedications(List.of("ibuprofen:200mg"));
-        updatedRecord.setAllergies(List.of("strawberry"));
+        jacobBoyd = new MedicalRecord(
+                "Jacob",
+                "Boyd",
+                LocalDate.parse("03/06/1989", formatter),
+                List.of("pharmacol:5000mg", "terazine:10mg", "noznazol:250mg"),
+                List.of()
+        );
     }
 
     /**
@@ -69,15 +76,23 @@ class MedicalRecordControllerTest {
     @Test
     @DisplayName("GET all medical records - Success")
     void testGetAllMedicalRecordsSuccess() throws Exception {
-        when(medicalRecordService.getAllMedicalRecords()).thenReturn(List.of(mockRecord));
+        when(medicalRecordService.getAllMedicalRecords()).thenReturn(List.of(johnBoyd, jacobBoyd));
 
         mockMvc.perform(get("/medicalrecord"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName").value("John"))
-                .andExpect(jsonPath("$[0].lastName").value("Doe"))
-                .andExpect(jsonPath("$[0].birthdate").value("1990-01-01"))
+                .andExpect(jsonPath("$[0].lastName").value("Boyd"))
+                .andExpect(jsonPath("$[0].birthdate").value("03/06/1984"))
                 .andExpect(jsonPath("$[0].medications[0]").value("aznol:350mg"))
-                .andExpect(jsonPath("$[0].allergies[0]").value("peanut"));
+                .andExpect(jsonPath("$[0].medications[1]").value("hydrapermazol:100mg"))
+                .andExpect(jsonPath("$[0].allergies[0]").value("nillacilan"))
+                .andExpect(jsonPath("$[1].firstName").value("Jacob"))
+                .andExpect(jsonPath("$[1].lastName").value("Boyd"))
+                .andExpect(jsonPath("$[1].birthdate").value("03/06/1989"))
+                .andExpect(jsonPath("$[1].medications[0]").value("pharmacol:5000mg"))
+                .andExpect(jsonPath("$[1].medications[1]").value("terazine:10mg"))
+                .andExpect(jsonPath("$[1].medications[2]").value("noznazol:250mg"))
+                .andExpect(jsonPath("$[1].allergies").isEmpty());
     }
 
     /**
@@ -92,7 +107,7 @@ class MedicalRecordControllerTest {
 
         mockMvc.perform(post("/medicalrecord")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockRecord)))
+                        .content(objectMapper.writeValueAsString(johnBoyd)))
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Created"));
 
@@ -107,12 +122,12 @@ class MedicalRecordControllerTest {
     @Test
     @DisplayName("PUT medical record - Success")
     void testUpdateMedicalRecordSuccess() throws Exception {
-        when(medicalRecordService.updateMedicalRecord(eq("John"), eq("Doe"), any(MedicalRecord.class)))
-                .thenReturn(updatedRecord);
+        when(medicalRecordService.updateMedicalRecord(eq("John"), eq("Boyd"), any(MedicalRecord.class)))
+                .thenReturn(johnBoyd);
 
-        mockMvc.perform(put("/medicalrecord/John/Doe")
+        mockMvc.perform(put("/medicalrecord/John/Boyd")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedRecord)))
+                        .content(objectMapper.writeValueAsString(johnBoyd)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("The medical record has been updated successfully."));
     }
@@ -130,7 +145,7 @@ class MedicalRecordControllerTest {
 
         mockMvc.perform(put("/medicalrecord/Jane/Smith")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedRecord)))
+                        .content(objectMapper.writeValueAsString(johnBoyd)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("The medical record not found."));
     }
@@ -143,9 +158,9 @@ class MedicalRecordControllerTest {
     @Test
     @DisplayName("DELETE medical record - Success")
     void testDeleteMedicalRecordSuccess() throws Exception {
-        when(medicalRecordService.deleteMedicalRecord("John", "Doe")).thenReturn(true);
+        when(medicalRecordService.deleteMedicalRecord("John", "Boyd")).thenReturn(true);
 
-        mockMvc.perform(delete("/medicalrecord/John/Doe"))
+        mockMvc.perform(delete("/medicalrecord/John/Boyd"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("The medical record has been successfully deleted."));
     }

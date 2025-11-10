@@ -63,19 +63,20 @@ public class ChildAlertServiceTest {
 
         ChildAlertDTO result = childAlertService.getChildrenAtAddress("1 Dover St");
 
+        // Validate children list
         assertThat(result).isNotNull();
         assertThat(result.getChildren()).hasSize(1);
         assertThat(result.getChildren().get(0).getFirstName()).isEqualTo("John");
         assertThat(result.getChildren().get(0).getAge()).isLessThanOrEqualTo(18);
 
-        assertThat(result.getHouseholdMembers()).hasSize(2);
-        assertThat(result.getHouseholdMembers().stream()
-                .anyMatch(m -> m.getFirstName().equals("Jane"))).isTrue();
+        // Validate household members (only the adult Jane)
+        assertThat(result.getHouseholdMembers()).hasSize(1);
+        assertThat(result.getHouseholdMembers().get(0).getFirstName()).isEqualTo("Jane");
+        assertThat(result.getHouseholdMembers().get(0).getLastName()).isEqualTo("Doe");
 
         verify(personService, times(1)).getAllPersons();
         verify(medicalRecordService, times(1)).getAllMedicalRecords();
     }
-
     /**
      * Test retrieving children at an address where no children are present.
      * Ensures that both children and household members lists are empty.

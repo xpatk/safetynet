@@ -16,25 +16,31 @@ import lombok.NoArgsConstructor;
  * are used across the application for generating alerts and reports
  * such as fire station coverage, child alerts, and emergency contacts.
  */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Person {
     /** First name of the person. Cannot be empty. */
     @NotBlank(message = "First name cannot be empty.")
     private String firstName;
+
     /** Last name of the person. Cannot be empty. */
     @NotBlank(message = "Last name cannot be empty.")
     private String lastName;
+
     /** Street address of the person. */
     private String address;
+
     /** City where the person resides. */
     private String city;
+
     /** Postal code of the person's address. */
     private String zip;
+
     /** Phone number of the person. */
     private String phone;
+
     /** Email address of the person. */
     private String email;
 }

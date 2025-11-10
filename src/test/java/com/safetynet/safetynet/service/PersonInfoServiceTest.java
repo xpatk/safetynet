@@ -43,8 +43,8 @@ public class PersonInfoServiceTest {
      */
     @BeforeEach
     void setUp() {
-        johnDoe = new Person("John", "Doe", "123 Main St", "City", "12345", "john@doe.com", "111-222-3333");
-        janeDoe = new Person("Jane", "Doe", "456 Oak St", "City", "12345", "jane@doe.com", "444-555-6666");
+        johnDoe = new Person("John", "Doe", "123 Main St", "City", "12345", "111-222-3333", "john@doe.com");
+        janeDoe = new Person("Jane", "Doe", "456 Oak St", "City", "12345", "444-555-6666", "jane@doe.com");
 
         johnRecord = new MedicalRecord("John", "Doe", LocalDate.of(2010, 1, 1), List.of("med1"), List.of("allergy1"));
         janeRecord = new MedicalRecord("Jane", "Doe", LocalDate.of(1985, 5, 15), List.of("med2"), List.of("allergy2"));
