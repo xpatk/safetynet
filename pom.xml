@@ -113,7 +113,7 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
 				<executions>
-					<!-- Attach JaCoCo agent during tests -->
+
 					<execution>
 						<id>prepare-agent</id>
 						<goals>
@@ -121,7 +121,7 @@
 						</goals>
 					</execution>
 
-					<!-- Generate JaCoCo coverage report after running tests -->
+
 					<execution>
 						<id>report</id>
 						<phase>test</phase>
